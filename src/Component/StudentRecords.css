@@ -1,0 +1,142 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+}
+
+.form-box {
+  border: 2px solid red;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 350px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input {
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.submit-btn {
+  background: gold;
+  padding: 10px;
+  border: none;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.clear-btn {
+  background: black;
+  color: white;
+  padding: 10px;
+  border: none;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.result.green {
+  background: #a6f4a6;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.table-container {
+  flex: 1;
+  min-width: 400px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.record-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: black;
+  color: white;
+}
+
+.record-table th,
+.record-table td {
+  border: 1px solid white;
+  padding: 8px 10px;
+  text-align: center;
+  min-width: 60px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-group button {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-group button:first-child {
+  background-color: #ffc107;
+  color: black;
+}
+
+.btn-group button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-box {
+    max-width: 100%;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-group button {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+}
