@@ -1,13 +1,37 @@
-# React + Vite
+# 🧾 Student Marks Record System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clean, beginner-friendly React app to store student details, calculate total percentage, and classify performance into divisions. Built for learning and demonstration!
 
-Currently, two official plugins are available:
+[![Live Demo](https://img.shields.io/badge/View%20Live%20App-Click%20Here-brightgreen?style=for-the-badge&logo=netlify)](https://student-reacord-v1.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🔍 About the Project
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-"# Student_Record_V1" 
+This simple marks management app allows users to:
+- Add student name, age, and marks
+- Automatically compute the percentage
+- Determine division (First / Second / Third / Fail)
+- Edit and delete student records
+- Mobile-friendly UI
+
+---
+
+## 🛠️ Built With
+
+- ⚛️ React (with `useReducer`)
+- 💅 Plain CSS
+- ⚡ Vite (lightweight build tool)
+- ☁️ Deployed on Netlify
+
+---
+
+## 📦 Getting Started
+
+Clone and run locally:
+
+```bash
+git clone https://github.com/your-username/student-record-v1.git
+cd student-record-v1
+npm install
+npm run dev
