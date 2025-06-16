@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import './StudentRecords.css';
 
+const subjects = ['Math', 'Science', 'English', 'History', 'Computer'];
+
 const initialState = {
   name: '',
   age: '',
@@ -9,74 +11,100 @@ const initialState = {
   editingIndex: null,
   percentage: '',
   division: '',
-  error: '',
+  errors: {
+    name: '',
+    age: '',
+    marks: ['', '', '', '', ''],
+  },
 };
 
-const subjects = ['Math', 'Science', 'English', 'History', 'Computer'];
-
-function getDivision(percentage, marks) {
-  const isFail = marks.some((m) => Number(m) < 33);
-  if (isFail) return 'Failed';
-  if (percentage >= 60) return 'First Division';
-  if (percentage >= 50) return 'Second Division';
-  return 'Third Division';
+function validateName(name) {
+  return /^[A-Za-z ]+$/.test(name);
 }
 
-function isValidName(name) {
-  return /^[a-zA-Z\s]+$/.test(name);
+function validateAge(age) {
+  return /^\d+$/.test(age);
 }
 
-function isValidNumber(value) {
-  return /^\d+$/.test(value);
+function validateMark(value) {
+  const num = Number(value);
+  return /^\d+$/.test(value) && num >= 0 && num <= 100;
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_FIELD':
-      return { ...state, [action.field]: action.value, error: '' };
+      return {
+        ...state,
+        [action.field]: action.value,
+        errors: {
+          ...state.errors,
+          [action.field]:
+            action.field === 'name' && !validateName(action.value)
+              ? 'Enter only letters'
+              : action.field === 'age' && !validateAge(action.value)
+              ? 'Enter valid age'
+              : '',
+        },
+      };
     case 'SET_MARK':
-      const updatedMarks = [...state.marks];
-      updatedMarks[action.index] = action.value;
-      return { ...state, marks: updatedMarks, error: '' };
+      const newMarks = [...state.marks];
+      const markErrors = [...state.errors.marks];
+      newMarks[action.index] = action.value;
+      markErrors[action.index] = !validateMark(action.value) ? '0-100 only' : '';
+      return {
+        ...state,
+        marks: newMarks,
+        errors: {
+          ...state.errors,
+          marks: markErrors,
+        },
+      };
     case 'CALCULATE':
       const nums = state.marks.map(Number);
       const total = nums.reduce((a, b) => a + b, 0);
       const percentage = (total / 500 * 100).toFixed(1);
-      const division = getDivision(percentage, nums);
+      const isFailed = nums.some((m) => m < 33);
+      const division = isFailed
+        ? 'Failed'
+        : percentage >= 60
+        ? 'First Division'
+        : percentage >= 50
+        ? 'Second Division'
+        : 'Third Division';
       return { ...state, percentage, division };
     case 'SUBMIT':
-      const record = {
+      const newRecord = {
         name: state.name,
         age: state.age,
         marks: [...state.marks],
         percentage: state.percentage,
         division: state.division,
       };
-      const all = [...state.records];
+      const updated = [...state.records];
       if (state.editingIndex !== null) {
-        all[state.editingIndex] = record;
+        updated[state.editingIndex] = newRecord;
       } else {
-        all.push(record);
+        updated.push(newRecord);
       }
-      return { ...initialState, records: all };
+      return { ...initialState, records: updated };
     case 'EDIT':
-      const data = state.records[action.index];
+      const edit = state.records[action.index];
       return {
         ...state,
-        name: data.name,
-        age: data.age,
-        marks: [...data.marks],
-        percentage: data.percentage,
-        division: data.division,
+        name: edit.name,
+        age: edit.age,
+        marks: [...edit.marks],
+        percentage: edit.percentage,
+        division: edit.division,
         editingIndex: action.index,
+        errors: initialState.errors,
       };
     case 'DELETE':
-      const newRecords = state.records.filter((_, i) => i !== action.index);
-      return { ...state, records: newRecords };
+      const remaining = state.records.filter((_, i) => i !== action.index);
+      return { ...state, records: remaining };
     case 'CLEAR':
       return { ...initialState, records: state.records };
-    case 'SET_ERROR':
-      return { ...state, error: action.message };
     default:
       return state;
   }
@@ -85,71 +113,69 @@ function reducer(state, action) {
 const StudentRecords = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const hasErrors = () => {
+    return (
+      state.errors.name ||
+      state.errors.age ||
+      state.errors.marks.some((e) => e) ||
+      state.name.trim() === '' ||
+      state.age.trim() === '' ||
+      state.marks.some((m) => m === '')
+    );
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isValidName(state.name)) {
-      dispatch({ type: 'SET_ERROR', message: 'Name must have only letters.' });
-      return;
+    if (!hasErrors()) {
+      dispatch({ type: 'CALCULATE' });
+      setTimeout(() => dispatch({ type: 'SUBMIT' }), 100);
     }
-    if (!isValidNumber(state.age)) {
-      dispatch({ type: 'SET_ERROR', message: 'Age must be a number.' });
-      return;
-    }
-    for (let mark of state.marks) {
-      if (!isValidNumber(mark)) {
-        dispatch({ type: 'SET_ERROR', message: 'Marks must be numbers.' });
-        return;
-      }
-    }
-    dispatch({ type: 'CALCULATE' });
-    setTimeout(() => {
-      dispatch({ type: 'SUBMIT' });
-    }, 100);
   };
 
   return (
     <div className="container">
       <form className="form-box" onSubmit={handleSubmit}>
-        <h3>Enter Student Info</h3>
+        <h3>Student Form</h3>
 
         <label>Name:</label>
         <input
           value={state.name}
-          onChange={(e) =>
-            dispatch({ type: 'SET_FIELD', field: 'name', value: e.target.value })
-          }
+          onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'name', value: e.target.value })}
+          placeholder="Enter name"
         />
+        {state.errors.name && <div className="error">{state.errors.name}</div>}
 
         <label>Age:</label>
         <input
           value={state.age}
-          onChange={(e) =>
-            dispatch({ type: 'SET_FIELD', field: 'age', value: e.target.value })
-          }
+          onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'age', value: e.target.value })}
+          placeholder="Enter age"
         />
+        {state.errors.age && <div className="error">{state.errors.age}</div>}
 
-        {subjects.map((subject, index) => (
-          <div key={index}>
-            <label>{subject}:</label>
+        {subjects.map((sub, i) => (
+          <div key={i}>
+            <label>{sub}:</label>
             <input
-              value={state.marks[index]}
-              onChange={(e) =>
-                dispatch({ type: 'SET_MARK', index, value: e.target.value })
-              }
+              value={state.marks[i]}
+              onChange={(e) => dispatch({ type: 'SET_MARK', index: i, value: e.target.value })}
+              placeholder={`Enter ${sub} marks`}
             />
+            {state.errors.marks[i] && <div className="error">{state.errors.marks[i]}</div>}
           </div>
         ))}
 
         <button className="submit-btn" type="submit">Submit</button>
-        <button className="clear-btn" type="button" onClick={() => dispatch({ type: 'CLEAR' })}>Clear</button>
+        <button className="clear-btn" type="button" onClick={() => dispatch({ type: 'CLEAR' })}>
+          Clear
+        </button>
 
-        {state.error && <div className="error">{state.error}</div>}
         {state.percentage && <div className="result green">{state.percentage}%</div>}
         {state.division && <div className="result green">{state.division}</div>}
       </form>
 
       <div className="table-container">
-        <div className="table-wrapper">
+        <div className="table-scroll">
           <table className="record-table">
             <thead>
               <tr>
@@ -167,7 +193,7 @@ const StudentRecords = () => {
                   <td>{rec.name}</td>
                   <td>{rec.age}</td>
                   {rec.marks.map((m, j) => <td key={j}>{m}</td>)}
-                  <td>{rec.percentage}%</td>
+                  <td>{rec.percentage}</td>
                   <td>{rec.division}</td>
                   <td>
                     <div className="btn-group">

@@ -61,18 +61,12 @@ input {
   background: #a6f4a6;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
 .table-container {
   flex: 1;
   min-width: 400px;
 }
 
-.table-wrapper {
+.table-scroll {
   overflow-x: auto;
 }
 
@@ -116,6 +110,12 @@ input {
   color: white;
 }
 
+.error {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -136,7 +136,7 @@ input {
     font-size: 13px;
   }
 
-  .table-wrapper {
+  .table-scroll {
     overflow-x: auto;
   }
 }
