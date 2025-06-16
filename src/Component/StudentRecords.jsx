@@ -139,6 +139,7 @@ const StudentRecords = () => {
 
         <label>Name:</label>
         <input
+          className={state.errors.name ? 'error-input' : ''}
           value={state.name}
           onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'name', value: e.target.value })}
           placeholder="Enter name"
@@ -147,6 +148,7 @@ const StudentRecords = () => {
 
         <label>Age:</label>
         <input
+          className={state.errors.age ? 'error-input' : ''}
           value={state.age}
           onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'age', value: e.target.value })}
           placeholder="Enter age"
@@ -157,6 +159,7 @@ const StudentRecords = () => {
           <div key={i}>
             <label>{sub}:</label>
             <input
+              className={state.errors.marks[i] ? 'error-input' : ''}
               value={state.marks[i]}
               onChange={(e) => dispatch({ type: 'SET_MARK', index: i, value: e.target.value })}
               placeholder={`Enter ${sub} marks`}

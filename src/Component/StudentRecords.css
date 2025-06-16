@@ -30,6 +30,17 @@ input {
   border: 1px solid #ccc;
 }
 
+input.error-input {
+  border-color: red;
+  outline: none;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
 .submit-btn {
   background: gold;
   padding: 10px;
@@ -108,12 +119,6 @@ input {
 .btn-group button:last-child {
   background-color: #dc3545;
   color: white;
-}
-
-.error {
-  color: red;
-  font-size: 13px;
-  margin-bottom: 5px;
 }
 
 @media (max-width: 768px) {
