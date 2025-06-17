@@ -31,7 +31,7 @@ This simple marks management app allows users to:
 Clone and run locally:
 
 ```bash
-git clone https://github.com/your-username/student-record-v1.git
+https://github.com/Purnav-18/Student_Record_V1.git
 cd student-record-v1
 npm install
 npm run dev
